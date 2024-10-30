@@ -5,14 +5,18 @@ using UnityEngine;
 public class SpawnerManager : MonoBehaviour
 {
 
-    [SerializeField] private GameObject enemyPrefab; 
+    [SerializeField] private GameObject enemyPrefab;
+
+    [SerializeField] private Transform parent;
+
+
 
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        StartCoroutine(nameof(SpawnRoutine));
     }
 
 
@@ -22,15 +26,21 @@ public class SpawnerManager : MonoBehaviour
 
 
         // Dusmani 7f yukarida ve -7f ile 7f arasinda bir yere spawnlamak icin pozisyon lokal degiskeni yarattik.
-        Vector3 position = Vector3.right * UnityEngine.Random.Range(-7f, 7f) + Vector3.up * 7f; 
+        Vector3 position = Vector3.right * UnityEngine.Random.Range(-7f, 7f) + Vector3.up * 7f;
 
         // Instantiate(GameObject prefab , Vector3 position , Quaternion rotation) fonksiyonuyla oyun sahnesine prefabler yuklenebilir
-        Instantiate(enemyPrefab , position , Quaternion.identity);
+        // Instantiate(enemyPrefab , position , Quaternion.identity);
+
+        // Spesifik bir objenin child'i olarak objeyi yaratmak icin asagidaki fonksiyon kullanilmalidir.
+        Instantiate(enemyPrefab, position, Quaternion.identity, parent);
+
     
     }
 
 
 
+    // Bu fonksiyon cagirildiginda tum spawnlanma islemleri durur.
+    public void OnGameOver() { StopAllCoroutines(); }
 
     
 

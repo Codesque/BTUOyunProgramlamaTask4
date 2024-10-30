@@ -20,6 +20,19 @@ public class BeanController : MonoBehaviour
     float lastShotTime;
 
 
+    SpawnerManager spawnerManager;
+    // Start is called before the first frame update
+    void Start()
+    {
+        // Oyunun baslangicinda bekleme suresi kadar beklememesi icin -Cooldown 'a esitledim.
+        lastShotTime = -Cooldown;
+
+        // GameObject.FindObjectOfType<T>() hiyerarsi tabindeki T tipindeki ilk objeyi dondurur.
+        spawnerManager = GameObject.FindObjectOfType<SpawnerManager>();
+
+    }
+
+
     // Saglik puani nesne degiskeni
     public float Health { get; private set; } = 100f;
 
@@ -33,8 +46,8 @@ public class BeanController : MonoBehaviour
 
         // Saglik puanini damageAmount kadar azalt.
         Health -= damageAmount;
-        //  Eger yeni saglik puani 0dan kucukse consola "GameOver" yazdir.Aksi halde alinan hasari yazdir.
-        if (Health <= 0) Debug.Log("Game Over"); else Debug.Log("Player took " + damageAmount + "amount of damage."); 
+        //  Eger yeni saglik puani 0dan kucukse spawnerManagerdaki spawn coroutinelerini durdurur.Aksi halde alinan hasari yazdir.
+        if (Health <= 0) spawnerManager.OnGameOver(); else Debug.Log("Player took " + damageAmount + "amount of damage."); 
 
     }
 
@@ -84,12 +97,6 @@ public class BeanController : MonoBehaviour
 
 
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        // Oyunun baslangicinda bekleme suresi kadar beklememesi icin -Cooldown 'a esitledim.
-        lastShotTime = -Cooldown;
-    }
 
     // Update is called once per frame
     void Update()
